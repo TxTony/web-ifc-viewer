@@ -178,6 +178,10 @@ export class IfcContext {
     return this.ifcCaster.castRayIfc();
   }
 
+  castVrRay(from: Matrix4, to: Matrix4) {
+    return this.ifcCaster.castVrRay(from, to);
+  }
+  
   fitToFrame() {
     this.ifcCamera.navMode[NavigationModes.Orbit].fitModelToFrame();
   }
