@@ -1,4 +1,4 @@
-import { Clock, Mesh, Object3D, Plane, Vector2, Vector3 } from 'three';
+import { Clock, Matrix4, Mesh, Object3D, Plane, Vector2, Vector3 } from 'three';
 import { IfcCamera } from './camera/camera';
 import { IfcRaycaster } from './raycaster';
 import { IfcRenderer } from './renderer/renderer';
@@ -8,6 +8,7 @@ import { IfcEvent, IfcEvents } from './ifcEvent';
 import { IfcComponent, Items, NavigationModes, ViewerOptions } from '../../base-types';
 import { IfcMouse } from './mouse';
 
+import { VRButton } from 'three/examples/jsm/webxr/VRButton';
 export class IfcContext {
   options: ViewerOptions;
   items: Items;
@@ -200,6 +201,8 @@ export class IfcContext {
     if (this.stats) this.stats.begin();
     const isWebXR = this.options.webXR || false;
     if (isWebXR) {
+      document.body.appendChild(VRButton.createButton(this.getRenderer()));
+      this.getRenderer().xr.enabled = true;
       this.renderForWebXR();
     } else {
       requestAnimationFrame(this.render);
@@ -208,15 +211,19 @@ export class IfcContext {
     if (this.stats) this.stats.end();
   };
   
+  webXrMoveTracking = () => {};
+  
   private renderForWebXR = () => {
     const newAnimationLoop = () => {
+      this.webXrMoveTracking();
       this.getRenderer().render(this.getScene(), this.getCamera());
     };
     this.getRenderer().setAnimationLoop(newAnimationLoop);
   };
-
+  
   private updateAllComponents() {
     const delta = this.clock.getDelta();
+    
     this.items.components.forEach((component) => component.update(delta));
   }
 
