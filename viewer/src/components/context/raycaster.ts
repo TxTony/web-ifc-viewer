@@ -1,4 +1,4 @@
-import { Intersection, Object3D, Raycaster } from 'three';
+import { Intersection, Matrix4, Object3D, Raycaster } from 'three';
 import { IfcComponent } from '../../base-types';
 import { IfcContext } from './context';
 
